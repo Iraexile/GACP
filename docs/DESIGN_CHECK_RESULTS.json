@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-24",
+  "scope": "Offline design checks only; not GACP tools or GitHub/ChatGPT E2E",
+  "libraries": {
+    "jsonschema": "4.25.1",
+    "rfc8785": "0.1.4"
+  },
+  "meta_schema": "passed",
+  "schema_cases": {
+    "total": 50,
+    "positive": 26,
+    "negative": 24,
+    "mismatches": 0
+  },
+  "hash_vectors": {
+    "positive": 24,
+    "negative": 7,
+    "mismatches": 0
+  },
+  "base_sha256": "876f4a5398771cd5dfa1fccbebf3ede28b909fbfcce12df63d78137478030504",
+  "not_run": [
+    "Git ref concurrency",
+    "ChatGPT read/write",
+    "Hooks",
+    "two-project tests",
+    "new-session recovery"
+  ],
+  "independent_node_check": {
+    "runtime": "node_repl",
+    "vectors": 24,
+    "canonical_bytes_and_sha256": "matched",
+    "scope": "Independent one-off ECMAScript serializer; not a shipped implementation or full RFC conformance suite"
+  },
+  "local_document_checks": {
+    "files": 18,
+    "json_files": 5,
+    "broken_relative_links": 0,
+    "state_transition_rows_matched": 11,
+    "protocol": "gacp/v1",
+    "schema_version": "1.0.0",
+    "spec_draft": "0.1.0-draft"
+  }
+}

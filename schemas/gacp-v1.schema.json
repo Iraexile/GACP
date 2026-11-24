@@ -1,0 +1,2508 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gacp.invalid/schemas/gacp-v1.schema.json",
+  "title": "GACP v1 / schema 1.0.0 / design draft 0.1.0-draft",
+  "description": "Offline-resolved design schema. Identity, authorization, hashes, equality across fields, references and event history require semantic checks. gacp.invalid is an identifier, not a deployed endpoint.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/project"
+    },
+    {
+      "$ref": "#/$defs/context"
+    },
+    {
+      "$ref": "#/$defs/task"
+    },
+    {
+      "$ref": "#/$defs/approval"
+    },
+    {
+      "$ref": "#/$defs/decision"
+    },
+    {
+      "$ref": "#/$defs/result"
+    },
+    {
+      "$ref": "#/$defs/claim"
+    },
+    {
+      "$ref": "#/$defs/event"
+    }
+  ],
+  "$defs": {
+    "uuid": {
+      "type": "string",
+      "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "project_id": {
+      "type": "string",
+      "pattern": "^github:[1-9][0-9]*$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "git_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "actor": {
+      "type": "string",
+      "pattern": "^github:(user|app):[1-9][0-9]*$"
+    },
+    "https_uri": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "object_ref": {
+      "type": "object",
+      "properties": {
+        "project_id": {
+          "type": "string",
+          "pattern": "^github:[1-9][0-9]*$"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        }
+      },
+      "required": [
+        "project_id",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "artifact_ref": {
+      "type": "object",
+      "properties": {
+        "project_id": {
+          "type": "string",
+          "pattern": "^github:[1-9][0-9]*$"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "project_id",
+        "id",
+        "commit",
+        "path",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "redacted": {
+          "const": true
+        }
+      },
+      "required": [
+        "uri",
+        "sha256",
+        "redacted"
+      ],
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "project_id": {
+          "type": "string",
+          "pattern": "^github:[1-9][0-9]*$"
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "read",
+              "edit",
+              "test",
+              "publish_result",
+              "open_pr",
+              "merge",
+              "deploy",
+              "delete_data",
+              "change_permissions"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "project_id",
+        "operations",
+        "paths"
+      ],
+      "additionalProperties": false
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "AUTH_REQUIRED",
+            "PERMISSION_DENIED",
+            "NOT_VISIBLE",
+            "NETWORK_UNAVAILABLE",
+            "CONFLICT",
+            "CLAIM_UNAVAILABLE",
+            "INTEGRITY_ERROR",
+            "VERSION_UNSUPPORTED",
+            "VALIDATION_FAILED",
+            "PARTIAL_PUBLISH",
+            "RATE_LIMITED",
+            "TEST_FAILED",
+            "IDEMPOTENCY_CONFLICT",
+            "APPROVAL_INVALID",
+            "STALE_ATTEMPT",
+            "INTERNAL_ERROR"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "operation_id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "details": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "null"
+            ]
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "retryable",
+        "operation_id",
+        "details"
+      ],
+      "additionalProperties": false
+    },
+    "project": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "const": "gacp/v1"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^github:[1-9][0-9]*$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+        },
+        "source_agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actor": {
+          "type": "string",
+          "pattern": "^github:(user|app):[1-9][0-9]*$"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "relation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "project_id": {
+                "type": "string",
+                "pattern": "^github:[1-9][0-9]*$"
+              },
+              "target": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "relation",
+              "project_id",
+              "target"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "extensions": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z0-9-]+(?:\\.[a-z0-9-]+)+$"
+          }
+        },
+        "kind": {
+          "const": "project"
+        },
+        "repository": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "default_branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "approvers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^github:(user|app):[1-9][0-9]*$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "reviewers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^github:(user|app):[1-9][0-9]*$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "execution_policy": {
+          "type": "object",
+          "properties": {
+            "verification": {
+              "enum": [
+                "reviewer_required",
+                "self_verification_low_risk"
+              ]
+            },
+            "allowed_operations": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "read",
+                  "edit",
+                  "test",
+                  "publish_result",
+                  "open_pr",
+                  "merge",
+                  "deploy",
+                  "delete_data",
+                  "change_permissions"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "allowed_paths": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "verification",
+            "allowed_operations",
+            "allowed_paths"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "protocol",
+        "schema_version",
+        "id",
+        "project_id",
+        "created_at",
+        "source_agent",
+        "actor",
+        "links",
+        "kind",
+        "repository",
+        "default_branch",
+        "approvers",
+        "reviewers",
+        "execution_policy"
+      ],
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "const": "gacp/v1"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^github:[1-9][0-9]*$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+        },
+        "source_agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actor": {
+          "type": "string",
+          "pattern": "^github:(user|app):[1-9][0-9]*$"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "relation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "project_id": {
+                "type": "string",
+                "pattern": "^github:[1-9][0-9]*$"
+              },
+              "target": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "relation",
+              "project_id",
+              "target"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "extensions": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z0-9-]+(?:\\.[a-z0-9-]+)+$"
+          }
+        },
+        "kind": {
+          "const": "context"
+        },
+        "background": {
+          "type": "string",
+          "minLength": 1
+        },
+        "goals": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "important_files": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "work_summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "repository": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "policy_ref": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        }
+      },
+      "required": [
+        "protocol",
+        "schema_version",
+        "id",
+        "project_id",
+        "created_at",
+        "source_agent",
+        "actor",
+        "links",
+        "kind",
+        "background",
+        "goals",
+        "constraints",
+        "important_files",
+        "work_summary",
+        "repository",
+        "policy_ref"
+      ],
+      "additionalProperties": false
+    },
+    "task": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "const": "gacp/v1"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^github:[1-9][0-9]*$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+        },
+        "source_agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actor": {
+          "type": "string",
+          "pattern": "^github:(user|app):[1-9][0-9]*$"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "relation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "project_id": {
+                "type": "string",
+                "pattern": "^github:[1-9][0-9]*$"
+              },
+              "target": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "relation",
+              "project_id",
+              "target"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "extensions": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z0-9-]+(?:\\.[a-z0-9-]+)+$"
+          }
+        },
+        "kind": {
+          "const": "task"
+        },
+        "issue_url": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "issue_node_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "priority": {
+          "enum": [
+            "P0",
+            "P1",
+            "P2",
+            "P3"
+          ]
+        },
+        "acceptance": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "related_files": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/object_ref"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "definition_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "operation_id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        }
+      },
+      "required": [
+        "protocol",
+        "schema_version",
+        "id",
+        "project_id",
+        "created_at",
+        "source_agent",
+        "actor",
+        "links",
+        "kind",
+        "issue_url",
+        "issue_node_id",
+        "title",
+        "description",
+        "priority",
+        "acceptance",
+        "related_files",
+        "dependencies",
+        "definition_sha256",
+        "operation_id"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "issue_url": {
+              "type": "null"
+            },
+            "issue_node_id": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "properties": {
+            "issue_url": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            },
+            "issue_node_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    },
+    "approval": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "const": "gacp/v1"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^github:[1-9][0-9]*$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+        },
+        "source_agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actor": {
+          "type": "string",
+          "pattern": "^github:(user|app):[1-9][0-9]*$"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "relation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "project_id": {
+                "type": "string",
+                "pattern": "^github:[1-9][0-9]*$"
+              },
+              "target": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "relation",
+              "project_id",
+              "target"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "extensions": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z0-9-]+(?:\\.[a-z0-9-]+)+$"
+          }
+        },
+        "kind": {
+          "const": "approval"
+        },
+        "task_id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "definition_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "approved_by": {
+          "type": "string",
+          "pattern": "^github:(user|app):[1-9][0-9]*$"
+        },
+        "approved_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "risk": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+        },
+        "authorization_receipt": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        }
+      },
+      "required": [
+        "protocol",
+        "schema_version",
+        "id",
+        "project_id",
+        "created_at",
+        "source_agent",
+        "actor",
+        "links",
+        "kind",
+        "task_id",
+        "attempt",
+        "definition_sha256",
+        "approved_by",
+        "approved_at",
+        "scope",
+        "risk",
+        "expires_at",
+        "authorization_receipt"
+      ],
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "const": "gacp/v1"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^github:[1-9][0-9]*$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+        },
+        "source_agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actor": {
+          "type": "string",
+          "pattern": "^github:(user|app):[1-9][0-9]*$"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "relation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "project_id": {
+                "type": "string",
+                "pattern": "^github:[1-9][0-9]*$"
+              },
+              "target": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "relation",
+              "project_id",
+              "target"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "extensions": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z0-9-]+(?:\\.[a-z0-9-]+)+$"
+          }
+        },
+        "kind": {
+          "const": "decision"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confirmed_by": {
+          "type": "string",
+          "pattern": "^github:(user|app):[1-9][0-9]*$"
+        },
+        "effective_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/object_ref"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "supersedes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/object_ref"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "protocol",
+        "schema_version",
+        "id",
+        "project_id",
+        "created_at",
+        "source_agent",
+        "actor",
+        "links",
+        "kind",
+        "title",
+        "rationale",
+        "confirmed_by",
+        "effective_at",
+        "tasks",
+        "supersedes"
+      ],
+      "additionalProperties": false
+    },
+    "test": {
+      "type": "object",
+      "properties": {
+        "argv": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "cwd": {
+          "type": "string",
+          "minLength": 1
+        },
+        "environment": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "started_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ended_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "not_run",
+            "inconclusive"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "argv",
+        "cwd",
+        "environment",
+        "started_at",
+        "ended_at",
+        "exit_code",
+        "status",
+        "evidence",
+        "notes"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "status": {
+              "const": "passed"
+            },
+            "started_at": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+            },
+            "ended_at": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+            },
+            "exit_code": {
+              "const": 0
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/evidence"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          }
+        },
+        {
+          "properties": {
+            "status": {
+              "const": "failed"
+            },
+            "started_at": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+            },
+            "ended_at": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+            },
+            "exit_code": {
+              "type": "integer"
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/evidence"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          }
+        },
+        {
+          "properties": {
+            "status": {
+              "const": "not_run"
+            },
+            "started_at": {
+              "type": "null"
+            },
+            "ended_at": {
+              "type": "null"
+            },
+            "exit_code": {
+              "type": "null"
+            },
+            "evidence": {
+              "type": "array",
+              "maxItems": 0
+            },
+            "notes": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "status": {
+              "const": "inconclusive"
+            },
+            "notes": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "const": "gacp/v1"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^github:[1-9][0-9]*$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+        },
+        "source_agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actor": {
+          "type": "string",
+          "pattern": "^github:(user|app):[1-9][0-9]*$"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "relation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "project_id": {
+                "type": "string",
+                "pattern": "^github:[1-9][0-9]*$"
+              },
+              "target": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "relation",
+              "project_id",
+              "target"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "extensions": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z0-9-]+(?:\\.[a-z0-9-]+)+$"
+          }
+        },
+        "kind": {
+          "const": "result"
+        },
+        "task_id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "approval_id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "definition_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "change_type": {
+          "enum": [
+            "code",
+            "research",
+            "documentation"
+          ]
+        },
+        "no_code_reason": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "code_commits": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "pull_requests": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "tests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/test"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/error"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "logs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "protocol",
+        "schema_version",
+        "id",
+        "project_id",
+        "created_at",
+        "source_agent",
+        "actor",
+        "links",
+        "kind",
+        "task_id",
+        "attempt",
+        "approval_id",
+        "definition_sha256",
+        "summary",
+        "change_type",
+        "no_code_reason",
+        "code_commits",
+        "pull_requests",
+        "tests",
+        "errors",
+        "logs",
+        "recommendations"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "change_type": {
+              "const": "code"
+            },
+            "no_code_reason": {
+              "type": "null"
+            }
+          },
+          "anyOf": [
+            {
+              "properties": {
+                "code_commits": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{40}$"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                }
+              }
+            },
+            {
+              "properties": {
+                "pull_requests": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^https://"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                }
+              }
+            }
+          ]
+        },
+        {
+          "properties": {
+            "change_type": {
+              "enum": [
+                "research",
+                "documentation"
+              ]
+            },
+            "no_code_reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    },
+    "claim": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "const": "gacp/v1"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^github:[1-9][0-9]*$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+        },
+        "source_agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actor": {
+          "type": "string",
+          "pattern": "^github:(user|app):[1-9][0-9]*$"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "relation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "project_id": {
+                "type": "string",
+                "pattern": "^github:[1-9][0-9]*$"
+              },
+              "target": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "relation",
+              "project_id",
+              "target"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "extensions": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z0-9-]+(?:\\.[a-z0-9-]+)+$"
+          }
+        },
+        "kind": {
+          "const": "claim"
+        },
+        "task_id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "operation_id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "definition_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "approval_id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "execution_id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "claim_ref": {
+          "type": "string",
+          "pattern": "^refs/heads/gacp/claims/[A-Za-z0-9_-]+/[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "protocol",
+        "schema_version",
+        "id",
+        "project_id",
+        "created_at",
+        "source_agent",
+        "actor",
+        "links",
+        "kind",
+        "task_id",
+        "attempt",
+        "operation_id",
+        "definition_sha256",
+        "approval_id",
+        "execution_id",
+        "claim_ref"
+      ],
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "const": "gacp/v1"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "project_id": {
+          "type": "string",
+          "pattern": "^github:[1-9][0-9]*$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+        },
+        "source_agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actor": {
+          "type": "string",
+          "pattern": "^github:(user|app):[1-9][0-9]*$"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "relation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "project_id": {
+                "type": "string",
+                "pattern": "^github:[1-9][0-9]*$"
+              },
+              "target": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "relation",
+              "project_id",
+              "target"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "extensions": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z0-9-]+(?:\\.[a-z0-9-]+)+$"
+          }
+        },
+        "kind": {
+          "const": "event"
+        },
+        "event_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "task_id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "operation_id": {
+          "type": "string",
+          "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "previous_event_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "from_state": {
+          "anyOf": [
+            {
+              "enum": [
+                "proposed",
+                "ready",
+                "claimed",
+                "running",
+                "blocked",
+                "verifying",
+                "done",
+                "failed",
+                "cancelled"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "to_state": {
+          "enum": [
+            "proposed",
+            "ready",
+            "claimed",
+            "running",
+            "blocked",
+            "verifying",
+            "done",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "payload": {
+          "type": "object"
+        },
+        "definition_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "approval_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "protocol",
+        "schema_version",
+        "id",
+        "project_id",
+        "created_at",
+        "source_agent",
+        "actor",
+        "links",
+        "kind",
+        "event_type",
+        "task_id",
+        "operation_id",
+        "previous_event_id",
+        "revision",
+        "attempt",
+        "from_state",
+        "to_state",
+        "payload",
+        "definition_sha256",
+        "approval_id"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "event_type": {
+              "const": "task.created"
+            },
+            "from_state": {
+              "type": "null"
+            },
+            "to_state": {
+              "const": "proposed"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "task": {
+                  "$ref": "#/$defs/object_ref"
+                }
+              },
+              "required": [
+                "task"
+              ],
+              "additionalProperties": false
+            },
+            "previous_event_id": {
+              "type": "null"
+            },
+            "revision": {
+              "const": 0
+            },
+            "attempt": {
+              "const": 0
+            },
+            "approval_id": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "properties": {
+            "event_type": {
+              "const": "task.approved"
+            },
+            "from_state": {
+              "const": "proposed"
+            },
+            "to_state": {
+              "const": "ready"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "approval": {
+                  "$ref": "#/$defs/approval"
+                }
+              },
+              "required": [
+                "approval"
+              ],
+              "additionalProperties": false
+            },
+            "previous_event_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "attempt": {
+              "const": 1
+            },
+            "approval_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            }
+          }
+        },
+        {
+          "properties": {
+            "event_type": {
+              "const": "task.claimed"
+            },
+            "from_state": {
+              "const": "ready"
+            },
+            "to_state": {
+              "const": "claimed"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "claim": {
+                  "$ref": "#/$defs/artifact_ref"
+                },
+                "claim_ref": {
+                  "type": "string",
+                  "pattern": "^refs/heads/gacp/claims/[A-Za-z0-9_-]+/[1-9][0-9]*$"
+                },
+                "execution_id": {
+                  "type": "string",
+                  "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                }
+              },
+              "required": [
+                "claim",
+                "claim_ref",
+                "execution_id"
+              ],
+              "additionalProperties": false
+            },
+            "previous_event_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "attempt": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "approval_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            }
+          }
+        },
+        {
+          "properties": {
+            "event_type": {
+              "const": "task.started"
+            },
+            "from_state": {
+              "const": "claimed"
+            },
+            "to_state": {
+              "const": "running"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "claim_ref": {
+                  "type": "string",
+                  "pattern": "^refs/heads/gacp/claims/[A-Za-z0-9_-]+/[1-9][0-9]*$"
+                },
+                "execution_id": {
+                  "type": "string",
+                  "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                },
+                "branch": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "base_commit": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                }
+              },
+              "required": [
+                "claim_ref",
+                "execution_id",
+                "branch",
+                "base_commit"
+              ],
+              "additionalProperties": false
+            },
+            "previous_event_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "attempt": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "approval_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            }
+          }
+        },
+        {
+          "properties": {
+            "event_type": {
+              "const": "task.blocked"
+            },
+            "from_state": {
+              "enum": [
+                "ready",
+                "claimed",
+                "running"
+              ]
+            },
+            "to_state": {
+              "const": "blocked"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "error": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/error"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "orphan_claim": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/artifact_ref"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "reason",
+                "error",
+                "orphan_claim"
+              ],
+              "additionalProperties": false
+            },
+            "previous_event_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "attempt": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "approval_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "from_state": {
+                    "const": "ready"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "payload": {
+                    "properties": {
+                      "orphan_claim": {
+                        "$ref": "#/$defs/artifact_ref"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "properties": {
+            "event_type": {
+              "const": "result.published"
+            },
+            "from_state": {
+              "const": "running"
+            },
+            "to_state": {
+              "const": "verifying"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/$defs/artifact_ref"
+                }
+              },
+              "required": [
+                "result"
+              ],
+              "additionalProperties": false
+            },
+            "previous_event_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "attempt": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "approval_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            }
+          }
+        },
+        {
+          "properties": {
+            "event_type": {
+              "const": "task.failed"
+            },
+            "from_state": {
+              "const": "running"
+            },
+            "to_state": {
+              "const": "failed"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "$ref": "#/$defs/error"
+                },
+                "partial_result": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/artifact_ref"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "error",
+                "partial_result"
+              ],
+              "additionalProperties": false
+            },
+            "previous_event_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "attempt": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "approval_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            }
+          }
+        },
+        {
+          "properties": {
+            "event_type": {
+              "const": "verification.passed"
+            },
+            "from_state": {
+              "const": "verifying"
+            },
+            "to_state": {
+              "const": "done"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/$defs/artifact_ref"
+                },
+                "verified_by": {
+                  "type": "string",
+                  "pattern": "^github:(user|app):[1-9][0-9]*$"
+                },
+                "evidence": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/evidence"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "result",
+                "verified_by",
+                "evidence"
+              ],
+              "additionalProperties": false
+            },
+            "previous_event_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "attempt": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "approval_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            }
+          }
+        },
+        {
+          "properties": {
+            "event_type": {
+              "const": "verification.failed"
+            },
+            "from_state": {
+              "const": "verifying"
+            },
+            "to_state": {
+              "const": "failed"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/$defs/artifact_ref"
+                },
+                "verified_by": {
+                  "type": "string",
+                  "pattern": "^github:(user|app):[1-9][0-9]*$"
+                },
+                "error": {
+                  "$ref": "#/$defs/error"
+                },
+                "evidence": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/evidence"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "result",
+                "verified_by",
+                "error",
+                "evidence"
+              ],
+              "additionalProperties": false
+            },
+            "previous_event_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "attempt": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "approval_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            }
+          }
+        },
+        {
+          "properties": {
+            "event_type": {
+              "const": "task.reapproved"
+            },
+            "from_state": {
+              "enum": [
+                "blocked",
+                "failed",
+                "done"
+              ]
+            },
+            "to_state": {
+              "const": "ready"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "approval": {
+                  "$ref": "#/$defs/approval"
+                },
+                "previous_attempt": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                },
+                "previous_executor_stopped": {
+                  "type": "string",
+                  "format": "uri",
+                  "pattern": "^https://"
+                }
+              },
+              "required": [
+                "approval",
+                "previous_attempt",
+                "previous_executor_stopped"
+              ],
+              "additionalProperties": false
+            },
+            "previous_event_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "attempt": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "approval_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            }
+          }
+        },
+        {
+          "properties": {
+            "event_type": {
+              "const": "task.cancelled"
+            },
+            "from_state": {
+              "enum": [
+                "proposed",
+                "ready",
+                "claimed",
+                "running",
+                "blocked",
+                "verifying",
+                "failed"
+              ]
+            },
+            "to_state": {
+              "const": "cancelled"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "revoked_by": {
+                  "type": "string",
+                  "pattern": "^github:(user|app):[1-9][0-9]*$"
+                }
+              },
+              "required": [
+                "reason",
+                "revoked_by"
+              ],
+              "additionalProperties": false
+            },
+            "previous_event_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "event_type": {
+              "const": "decision.updated"
+            },
+            "from_state": {
+              "enum": [
+                "proposed",
+                "ready",
+                "claimed",
+                "running",
+                "blocked",
+                "verifying",
+                "done",
+                "failed",
+                "cancelled"
+              ]
+            },
+            "to_state": {
+              "enum": [
+                "proposed",
+                "ready",
+                "claimed",
+                "running",
+                "blocked",
+                "verifying",
+                "done",
+                "failed",
+                "cancelled"
+              ]
+            },
+            "previous_event_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "decision": {
+                  "$ref": "#/$defs/artifact_ref"
+                }
+              },
+              "required": [
+                "decision"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "event_type": {
+              "const": "claim.conflict"
+            },
+            "from_state": {
+              "enum": [
+                "proposed",
+                "ready",
+                "claimed",
+                "running",
+                "blocked",
+                "verifying",
+                "done",
+                "failed",
+                "cancelled"
+              ]
+            },
+            "to_state": {
+              "enum": [
+                "proposed",
+                "ready",
+                "claimed",
+                "running",
+                "blocked",
+                "verifying",
+                "done",
+                "failed",
+                "cancelled"
+              ]
+            },
+            "previous_event_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "claim_ref": {
+                  "type": "string",
+                  "pattern": "^refs/heads/gacp/claims/[A-Za-z0-9_-]+/[1-9][0-9]*$"
+                },
+                "expected_operation_id": {
+                  "type": "string",
+                  "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                },
+                "observed_operation_id": {
+                  "type": "string",
+                  "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "claim_ref",
+                "expected_operation_id",
+                "observed_operation_id",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "event_type": {
+              "const": "sync.failed"
+            },
+            "from_state": {
+              "enum": [
+                "proposed",
+                "ready",
+                "claimed",
+                "running",
+                "blocked",
+                "verifying",
+                "done",
+                "failed",
+                "cancelled"
+              ]
+            },
+            "to_state": {
+              "enum": [
+                "proposed",
+                "ready",
+                "claimed",
+                "running",
+                "blocked",
+                "verifying",
+                "done",
+                "failed",
+                "cancelled"
+              ]
+            },
+            "previous_event_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "$ref": "#/$defs/error"
+                }
+              },
+              "required": [
+                "error"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        {
+          "properties": {
+            "event_type": {
+              "const": "conflict.resolved"
+            },
+            "from_state": {
+              "enum": [
+                "proposed",
+                "ready",
+                "claimed",
+                "running",
+                "blocked",
+                "verifying",
+                "done",
+                "failed",
+                "cancelled"
+              ]
+            },
+            "to_state": {
+              "enum": [
+                "proposed",
+                "ready",
+                "claimed",
+                "running",
+                "blocked",
+                "verifying",
+                "done",
+                "failed",
+                "cancelled"
+              ]
+            },
+            "previous_event_id": {
+              "type": "string",
+              "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "candidates": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                  },
+                  "minItems": 2,
+                  "uniqueItems": true
+                },
+                "selected_event_id": {
+                  "type": "string",
+                  "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                },
+                "resolved_by": {
+                  "type": "string",
+                  "pattern": "^github:(user|app):[1-9][0-9]*$"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "candidates",
+                "selected_event_id",
+                "resolved_by",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    }
+  }
+}

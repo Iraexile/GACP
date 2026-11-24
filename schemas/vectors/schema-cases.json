@@ -1,0 +1,1874 @@
+{
+  "description": "Synthetic structural fixtures, not evidence of executed tasks; cross-field semantics are checked separately.",
+  "cases": [
+    {
+      "id": "S-task",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "task",
+        "id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "issue_url": null,
+        "issue_node_id": null,
+        "title": "Add boundary test",
+        "description": "Synthetic design fixture; do not execute.",
+        "priority": "P2",
+        "acceptance": [
+          "Record actual exit code"
+        ],
+        "related_files": [
+          "src/example.py"
+        ],
+        "dependencies": [],
+        "definition_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "operation_id": "urn:uuid:00000002-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-approval",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "approval",
+        "id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approved_by": "github:user:123",
+        "approved_at": "2026-11-24T00:00:00Z",
+        "expires_at": "2026-11-25T00:00:00Z",
+        "scope": {
+          "project_id": "github:123456",
+          "operations": [
+            "edit",
+            "test",
+            "publish_result"
+          ],
+          "paths": [
+            "src/**"
+          ]
+        },
+        "risk": "low",
+        "authorization_receipt": "https://example.invalid/evidence"
+      }
+    },
+    {
+      "id": "S-claim",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "claim",
+        "id": "urn:uuid:00000004-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "operation_id": "urn:uuid:00000005-0000-4000-8000-000000000000",
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "execution_id": "urn:uuid:00000006-0000-4000-8000-000000000000",
+        "claim_ref": "refs/heads/gacp/claims/SV9maXh0dXJl/1"
+      }
+    },
+    {
+      "id": "S-result",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "result",
+        "id": "urn:uuid:00000007-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "summary": "Synthetic design report",
+        "change_type": "research",
+        "no_code_reason": "Fixture only",
+        "code_commits": [],
+        "pull_requests": [],
+        "tests": [
+          {
+            "argv": [
+              "python",
+              "-m",
+              "pytest"
+            ],
+            "cwd": ".",
+            "environment": {
+              "os": "synthetic"
+            },
+            "started_at": null,
+            "ended_at": null,
+            "exit_code": null,
+            "status": "not_run",
+            "evidence": [],
+            "notes": "Fixture only; no execution"
+          }
+        ],
+        "errors": [],
+        "logs": [],
+        "recommendations": []
+      }
+    },
+    {
+      "id": "S-project",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "project",
+        "id": "urn:uuid:00000008-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "repository": "https://github.com/example/design-fixture",
+        "default_branch": "main",
+        "approvers": [
+          "github:user:123"
+        ],
+        "reviewers": [
+          "github:user:123"
+        ],
+        "execution_policy": {
+          "verification": "reviewer_required",
+          "allowed_operations": [
+            "read",
+            "edit",
+            "test",
+            "publish_result"
+          ],
+          "allowed_paths": [
+            "src/**"
+          ]
+        }
+      }
+    },
+    {
+      "id": "S-context",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "context",
+        "id": "urn:uuid:00000009-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "background": "Synthetic only",
+        "goals": [
+          "Review schema"
+        ],
+        "constraints": [],
+        "important_files": [],
+        "work_summary": "No runtime",
+        "repository": "https://github.com/example/design-fixture",
+        "policy_ref": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "id": "S-decision",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "decision",
+        "id": "urn:uuid:0000000a-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "title": "Fixture",
+        "rationale": "Design review only",
+        "confirmed_by": "github:user:123",
+        "effective_at": "2026-11-24T00:00:00Z",
+        "tasks": [
+          {
+            "project_id": "github:123456",
+            "id": "urn:uuid:00000001-0000-4000-8000-000000000000"
+          }
+        ],
+        "supersedes": []
+      }
+    },
+    {
+      "id": "S-task.created",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000064-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.created",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:0000012d-0000-4000-8000-000000000000",
+        "previous_event_id": null,
+        "revision": 0,
+        "attempt": 0,
+        "from_state": null,
+        "to_state": "proposed",
+        "payload": {
+          "task": {
+            "project_id": "github:123456",
+            "id": "urn:uuid:00000001-0000-4000-8000-000000000000"
+          }
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": null
+      }
+    },
+    {
+      "id": "S-task.approved",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000065-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.approved",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:0000012e-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "proposed",
+        "to_state": "ready",
+        "payload": {
+          "approval": {
+            "protocol": "gacp/v1",
+            "schema_version": "1.0.0",
+            "kind": "approval",
+            "id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+            "project_id": "github:123456",
+            "created_at": "2026-11-24T00:00:00Z",
+            "source_agent": "fixture-only",
+            "actor": "github:user:123",
+            "links": [],
+            "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+            "attempt": 1,
+            "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "approved_by": "github:user:123",
+            "approved_at": "2026-11-24T00:00:00Z",
+            "expires_at": "2026-11-25T00:00:00Z",
+            "scope": {
+              "project_id": "github:123456",
+              "operations": [
+                "edit",
+                "test",
+                "publish_result"
+              ],
+              "paths": [
+                "src/**"
+              ]
+            },
+            "risk": "low",
+            "authorization_receipt": "https://example.invalid/evidence"
+          }
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-task.claimed",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000066-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.claimed",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:0000012f-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "ready",
+        "to_state": "claimed",
+        "payload": {
+          "claim": {
+            "project_id": "github:123456",
+            "id": "urn:uuid:00000004-0000-4000-8000-000000000000",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "path": "claim.json",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "claim_ref": "refs/heads/gacp/claims/SV9maXh0dXJl/1",
+          "execution_id": "urn:uuid:00000006-0000-4000-8000-000000000000"
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-task.started",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000067-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.started",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:00000130-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "claimed",
+        "to_state": "running",
+        "payload": {
+          "claim_ref": "refs/heads/gacp/claims/SV9maXh0dXJl/1",
+          "execution_id": "urn:uuid:00000006-0000-4000-8000-000000000000",
+          "branch": "work/fixture",
+          "base_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-task.blocked",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000068-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.blocked",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:00000131-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "claimed",
+        "to_state": "blocked",
+        "payload": {
+          "reason": "Fixture",
+          "error": null,
+          "orphan_claim": null
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-result.published",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000069-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "result.published",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:00000132-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "running",
+        "to_state": "verifying",
+        "payload": {
+          "result": {
+            "project_id": "github:123456",
+            "id": "urn:uuid:00000007-0000-4000-8000-000000000000",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "path": ".gacp/results/00000007-0000-4000-8000-000000000000.md",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-task.failed",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:0000006a-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.failed",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:00000133-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "running",
+        "to_state": "failed",
+        "payload": {
+          "error": {
+            "code": "TEST_FAILED",
+            "message": "Synthetic failure fixture",
+            "retryable": false,
+            "operation_id": "urn:uuid:00000005-0000-4000-8000-000000000000",
+            "details": {}
+          },
+          "partial_result": null
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-verification.passed",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:0000006b-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "verification.passed",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:00000134-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "verifying",
+        "to_state": "done",
+        "payload": {
+          "result": {
+            "project_id": "github:123456",
+            "id": "urn:uuid:00000007-0000-4000-8000-000000000000",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "path": ".gacp/results/fixture.md",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "verified_by": "github:user:123",
+          "evidence": [
+            {
+              "uri": "https://example.invalid/evidence",
+              "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "redacted": true
+            }
+          ]
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-verification.failed",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:0000006c-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "verification.failed",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:00000135-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "verifying",
+        "to_state": "failed",
+        "payload": {
+          "result": {
+            "project_id": "github:123456",
+            "id": "urn:uuid:00000007-0000-4000-8000-000000000000",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "path": ".gacp/results/fixture.md",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "verified_by": "github:user:123",
+          "error": {
+            "code": "TEST_FAILED",
+            "message": "Synthetic failure fixture",
+            "retryable": false,
+            "operation_id": "urn:uuid:00000005-0000-4000-8000-000000000000",
+            "details": {}
+          },
+          "evidence": [
+            {
+              "uri": "https://example.invalid/evidence",
+              "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "redacted": true
+            }
+          ]
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-task.reapproved",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:0000006d-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.reapproved",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:00000136-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 2,
+        "from_state": "blocked",
+        "to_state": "ready",
+        "payload": {
+          "approval": {
+            "protocol": "gacp/v1",
+            "schema_version": "1.0.0",
+            "kind": "approval",
+            "id": "urn:uuid:0000001e-0000-4000-8000-000000000000",
+            "project_id": "github:123456",
+            "created_at": "2026-11-24T00:00:00Z",
+            "source_agent": "fixture-only",
+            "actor": "github:user:123",
+            "links": [],
+            "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+            "attempt": 2,
+            "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "approved_by": "github:user:123",
+            "approved_at": "2026-11-24T00:00:00Z",
+            "expires_at": "2026-11-25T00:00:00Z",
+            "scope": {
+              "project_id": "github:123456",
+              "operations": [
+                "edit",
+                "test",
+                "publish_result"
+              ],
+              "paths": [
+                "src/**"
+              ]
+            },
+            "risk": "low",
+            "authorization_receipt": "https://example.invalid/evidence"
+          },
+          "previous_attempt": 1,
+          "previous_executor_stopped": "https://example.invalid/evidence"
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:0000001e-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-task.cancelled",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:0000006e-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.cancelled",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:00000137-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "proposed",
+        "to_state": "cancelled",
+        "payload": {
+          "reason": "Fixture",
+          "revoked_by": "github:user:123"
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-decision.updated",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:0000006f-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "decision.updated",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:00000138-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "ready",
+        "to_state": "ready",
+        "payload": {
+          "decision": {
+            "project_id": "github:123456",
+            "id": "urn:uuid:0000000a-0000-4000-8000-000000000000",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "path": ".gacp/decisions/fixture.md",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-claim.conflict",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000070-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "claim.conflict",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:00000139-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "ready",
+        "to_state": "ready",
+        "payload": {
+          "claim_ref": "refs/heads/gacp/claims/SV9maXh0dXJl/1",
+          "expected_operation_id": "urn:uuid:00000005-0000-4000-8000-000000000000",
+          "observed_operation_id": "urn:uuid:00000032-0000-4000-8000-000000000000",
+          "reason": "Fixture"
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-sync.failed",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000071-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "sync.failed",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:0000013a-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "ready",
+        "to_state": "ready",
+        "payload": {
+          "error": {
+            "code": "TEST_FAILED",
+            "message": "Synthetic failure fixture",
+            "retryable": false,
+            "operation_id": "urn:uuid:00000005-0000-4000-8000-000000000000",
+            "details": {}
+          }
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-conflict.resolved",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000072-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "conflict.resolved",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:0000013b-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "ready",
+        "to_state": "ready",
+        "payload": {
+          "candidates": [
+            "urn:uuid:00000032-0000-4000-8000-000000000000",
+            "urn:uuid:00000033-0000-4000-8000-000000000000"
+          ],
+          "selected_event_id": "urn:uuid:00000032-0000-4000-8000-000000000000",
+          "resolved_by": "github:user:123",
+          "reason": "Fixture"
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-test-passed",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "result",
+        "id": "urn:uuid:00000007-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "summary": "Synthetic design report",
+        "change_type": "research",
+        "no_code_reason": "Fixture only",
+        "code_commits": [],
+        "pull_requests": [],
+        "tests": [
+          {
+            "argv": [
+              "python",
+              "-m",
+              "pytest"
+            ],
+            "cwd": ".",
+            "environment": {
+              "os": "synthetic"
+            },
+            "started_at": "2026-11-24T00:00:00Z",
+            "ended_at": "2026-11-24T00:00:01Z",
+            "exit_code": 0,
+            "status": "passed",
+            "evidence": [
+              {
+                "uri": "https://example.invalid/evidence",
+                "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "redacted": true
+              }
+            ],
+            "notes": "Fixture only; no execution"
+          }
+        ],
+        "errors": [],
+        "logs": [],
+        "recommendations": []
+      }
+    },
+    {
+      "id": "S-test-failed",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "result",
+        "id": "urn:uuid:00000007-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "summary": "Synthetic design report",
+        "change_type": "research",
+        "no_code_reason": "Fixture only",
+        "code_commits": [],
+        "pull_requests": [],
+        "tests": [
+          {
+            "argv": [
+              "python",
+              "-m",
+              "pytest"
+            ],
+            "cwd": ".",
+            "environment": {
+              "os": "synthetic"
+            },
+            "started_at": "2026-11-24T00:00:00Z",
+            "ended_at": "2026-11-24T00:00:01Z",
+            "exit_code": 1,
+            "status": "failed",
+            "evidence": [
+              {
+                "uri": "https://example.invalid/evidence",
+                "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "redacted": true
+              }
+            ],
+            "notes": "Fixture only; no execution"
+          }
+        ],
+        "errors": [],
+        "logs": [],
+        "recommendations": []
+      }
+    },
+    {
+      "id": "S-test-inconclusive",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "result",
+        "id": "urn:uuid:00000007-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "summary": "Synthetic design report",
+        "change_type": "research",
+        "no_code_reason": "Fixture only",
+        "code_commits": [],
+        "pull_requests": [],
+        "tests": [
+          {
+            "argv": [
+              "python",
+              "-m",
+              "pytest"
+            ],
+            "cwd": ".",
+            "environment": {
+              "os": "synthetic"
+            },
+            "started_at": null,
+            "ended_at": null,
+            "exit_code": null,
+            "status": "inconclusive",
+            "evidence": [],
+            "notes": "Fixture only; no execution"
+          }
+        ],
+        "errors": [],
+        "logs": [],
+        "recommendations": []
+      }
+    },
+    {
+      "id": "SX-missing-title",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "task",
+        "id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "issue_url": null,
+        "issue_node_id": null,
+        "description": "Synthetic design fixture; do not execute.",
+        "priority": "P2",
+        "acceptance": [
+          "Record actual exit code"
+        ],
+        "related_files": [
+          "src/example.py"
+        ],
+        "dependencies": [],
+        "definition_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "operation_id": "urn:uuid:00000002-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "SX-extra-status",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "task",
+        "id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "issue_url": null,
+        "issue_node_id": null,
+        "title": "Add boundary test",
+        "description": "Synthetic design fixture; do not execute.",
+        "priority": "P2",
+        "acceptance": [
+          "Record actual exit code"
+        ],
+        "related_files": [
+          "src/example.py"
+        ],
+        "dependencies": [],
+        "definition_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "operation_id": "urn:uuid:00000002-0000-4000-8000-000000000000",
+        "status": "done"
+      }
+    },
+    {
+      "id": "SX-wrong-version",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "2.0.0",
+        "kind": "task",
+        "id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "issue_url": null,
+        "issue_node_id": null,
+        "title": "Add boundary test",
+        "description": "Synthetic design fixture; do not execute.",
+        "priority": "P2",
+        "acceptance": [
+          "Record actual exit code"
+        ],
+        "related_files": [
+          "src/example.py"
+        ],
+        "dependencies": [],
+        "definition_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "operation_id": "urn:uuid:00000002-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "SX-half-issue-receipt",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "task",
+        "id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "issue_url": "https://example.invalid/evidence",
+        "issue_node_id": null,
+        "title": "Add boundary test",
+        "description": "Synthetic design fixture; do not execute.",
+        "priority": "P2",
+        "acceptance": [
+          "Record actual exit code"
+        ],
+        "related_files": [
+          "src/example.py"
+        ],
+        "dependencies": [],
+        "definition_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "operation_id": "urn:uuid:00000002-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "SX-unqualified-dependency",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "task",
+        "id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "issue_url": null,
+        "issue_node_id": null,
+        "title": "Add boundary test",
+        "description": "Synthetic design fixture; do not execute.",
+        "priority": "P2",
+        "acceptance": [
+          "Record actual exit code"
+        ],
+        "related_files": [
+          "src/example.py"
+        ],
+        "dependencies": [
+          "urn:uuid:00000009-0000-4000-8000-000000000000"
+        ],
+        "definition_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "operation_id": "urn:uuid:00000002-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "SX-attempt-zero",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "approval",
+        "id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 0,
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approved_by": "github:user:123",
+        "approved_at": "2026-11-24T00:00:00Z",
+        "expires_at": "2026-11-25T00:00:00Z",
+        "scope": {
+          "project_id": "github:123456",
+          "operations": [
+            "edit",
+            "test",
+            "publish_result"
+          ],
+          "paths": [
+            "src/**"
+          ]
+        },
+        "risk": "low",
+        "authorization_receipt": "https://example.invalid/evidence"
+      }
+    },
+    {
+      "id": "SX-missing-receipt",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "approval",
+        "id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approved_by": "github:user:123",
+        "approved_at": "2026-11-24T00:00:00Z",
+        "expires_at": "2026-11-25T00:00:00Z",
+        "scope": {
+          "project_id": "github:123456",
+          "operations": [
+            "edit",
+            "test",
+            "publish_result"
+          ],
+          "paths": [
+            "src/**"
+          ]
+        },
+        "risk": "low"
+      }
+    },
+    {
+      "id": "SX-invalid-risk",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "approval",
+        "id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approved_by": "github:user:123",
+        "approved_at": "2026-11-24T00:00:00Z",
+        "expires_at": "2026-11-25T00:00:00Z",
+        "scope": {
+          "project_id": "github:123456",
+          "operations": [
+            "edit",
+            "test",
+            "publish_result"
+          ],
+          "paths": [
+            "src/**"
+          ]
+        },
+        "risk": "safe",
+        "authorization_receipt": "https://example.invalid/evidence"
+      }
+    },
+    {
+      "id": "SX-empty-scope",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "approval",
+        "id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approved_by": "github:user:123",
+        "approved_at": "2026-11-24T00:00:00Z",
+        "expires_at": "2026-11-25T00:00:00Z",
+        "scope": {
+          "project_id": "github:123456",
+          "operations": [],
+          "paths": [
+            "src/**"
+          ]
+        },
+        "risk": "low",
+        "authorization_receipt": "https://example.invalid/evidence"
+      }
+    },
+    {
+      "id": "SX-nonutc",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "approval",
+        "id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approved_by": "github:user:123",
+        "approved_at": "2026-11-24T08:00:00+08:00",
+        "expires_at": "2026-11-25T00:00:00Z",
+        "scope": {
+          "project_id": "github:123456",
+          "operations": [
+            "edit",
+            "test",
+            "publish_result"
+          ],
+          "paths": [
+            "src/**"
+          ]
+        },
+        "risk": "low",
+        "authorization_receipt": "https://example.invalid/evidence"
+      }
+    },
+    {
+      "id": "SX-impossible-date",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "approval",
+        "id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approved_by": "github:user:123",
+        "approved_at": "2026-11-30T25:00:00Z",
+        "expires_at": "2026-11-25T00:00:00Z",
+        "scope": {
+          "project_id": "github:123456",
+          "operations": [
+            "edit",
+            "test",
+            "publish_result"
+          ],
+          "paths": [
+            "src/**"
+          ]
+        },
+        "risk": "low",
+        "authorization_receipt": "https://example.invalid/evidence"
+      }
+    },
+    {
+      "id": "SX-invalid-transition",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000065-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.approved",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:0000012e-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "proposed",
+        "to_state": "done",
+        "payload": {
+          "approval": {
+            "protocol": "gacp/v1",
+            "schema_version": "1.0.0",
+            "kind": "approval",
+            "id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+            "project_id": "github:123456",
+            "created_at": "2026-11-24T00:00:00Z",
+            "source_agent": "fixture-only",
+            "actor": "github:user:123",
+            "links": [],
+            "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+            "attempt": 1,
+            "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "approved_by": "github:user:123",
+            "approved_at": "2026-11-24T00:00:00Z",
+            "expires_at": "2026-11-25T00:00:00Z",
+            "scope": {
+              "project_id": "github:123456",
+              "operations": [
+                "edit",
+                "test",
+                "publish_result"
+              ],
+              "paths": [
+                "src/**"
+              ]
+            },
+            "risk": "low",
+            "authorization_receipt": "https://example.invalid/evidence"
+          }
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "SX-untyped-payload",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000065-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.approved",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:0000012e-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "proposed",
+        "to_state": "ready",
+        "payload": {
+          "approved": true
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "SX-null-predecessor",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000065-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.approved",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:0000012e-0000-4000-8000-000000000000",
+        "previous_event_id": null,
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "proposed",
+        "to_state": "ready",
+        "payload": {
+          "approval": {
+            "protocol": "gacp/v1",
+            "schema_version": "1.0.0",
+            "kind": "approval",
+            "id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+            "project_id": "github:123456",
+            "created_at": "2026-11-24T00:00:00Z",
+            "source_agent": "fixture-only",
+            "actor": "github:user:123",
+            "links": [],
+            "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+            "attempt": 1,
+            "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "approved_by": "github:user:123",
+            "approved_at": "2026-11-24T00:00:00Z",
+            "expires_at": "2026-11-25T00:00:00Z",
+            "scope": {
+              "project_id": "github:123456",
+              "operations": [
+                "edit",
+                "test",
+                "publish_result"
+              ],
+              "paths": [
+                "src/**"
+              ]
+            },
+            "risk": "low",
+            "authorization_receipt": "https://example.invalid/evidence"
+          }
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "SX-unknown-event",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000065-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.magically_done",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:0000012e-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "proposed",
+        "to_state": "ready",
+        "payload": {
+          "approval": {
+            "protocol": "gacp/v1",
+            "schema_version": "1.0.0",
+            "kind": "approval",
+            "id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+            "project_id": "github:123456",
+            "created_at": "2026-11-24T00:00:00Z",
+            "source_agent": "fixture-only",
+            "actor": "github:user:123",
+            "links": [],
+            "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+            "attempt": 1,
+            "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "approved_by": "github:user:123",
+            "approved_at": "2026-11-24T00:00:00Z",
+            "expires_at": "2026-11-25T00:00:00Z",
+            "scope": {
+              "project_id": "github:123456",
+              "operations": [
+                "edit",
+                "test",
+                "publish_result"
+              ],
+              "paths": [
+                "src/**"
+              ]
+            },
+            "risk": "low",
+            "authorization_receipt": "https://example.invalid/evidence"
+          }
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "SX-approval-event-attempt",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000065-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.approved",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:0000012e-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 2,
+        "from_state": "proposed",
+        "to_state": "ready",
+        "payload": {
+          "approval": {
+            "protocol": "gacp/v1",
+            "schema_version": "1.0.0",
+            "kind": "approval",
+            "id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+            "project_id": "github:123456",
+            "created_at": "2026-11-24T00:00:00Z",
+            "source_agent": "fixture-only",
+            "actor": "github:user:123",
+            "links": [],
+            "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+            "attempt": 1,
+            "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "approved_by": "github:user:123",
+            "approved_at": "2026-11-24T00:00:00Z",
+            "expires_at": "2026-11-25T00:00:00Z",
+            "scope": {
+              "project_id": "github:123456",
+              "operations": [
+                "edit",
+                "test",
+                "publish_result"
+              ],
+              "paths": [
+                "src/**"
+              ]
+            },
+            "risk": "low",
+            "authorization_receipt": "https://example.invalid/evidence"
+          }
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "SX-result-code-without-evidence",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "result",
+        "id": "urn:uuid:00000007-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "summary": "Synthetic design report",
+        "change_type": "code",
+        "no_code_reason": null,
+        "code_commits": [],
+        "pull_requests": [],
+        "tests": [
+          {
+            "argv": [
+              "python",
+              "-m",
+              "pytest"
+            ],
+            "cwd": ".",
+            "environment": {
+              "os": "synthetic"
+            },
+            "started_at": null,
+            "ended_at": null,
+            "exit_code": null,
+            "status": "not_run",
+            "evidence": [],
+            "notes": "Fixture only; no execution"
+          }
+        ],
+        "errors": [],
+        "logs": [],
+        "recommendations": []
+      }
+    },
+    {
+      "id": "SX-passed-null-exit",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "result",
+        "id": "urn:uuid:00000007-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "summary": "Synthetic design report",
+        "change_type": "research",
+        "no_code_reason": "Fixture only",
+        "code_commits": [],
+        "pull_requests": [],
+        "tests": [
+          {
+            "argv": [
+              "python",
+              "-m",
+              "pytest"
+            ],
+            "cwd": ".",
+            "environment": {
+              "os": "synthetic"
+            },
+            "started_at": null,
+            "ended_at": null,
+            "exit_code": null,
+            "status": "passed",
+            "evidence": [],
+            "notes": "Fixture only; no execution"
+          }
+        ],
+        "errors": [],
+        "logs": [],
+        "recommendations": []
+      }
+    },
+    {
+      "id": "SX-passed-no-evidence",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "result",
+        "id": "urn:uuid:00000007-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "summary": "Synthetic design report",
+        "change_type": "research",
+        "no_code_reason": "Fixture only",
+        "code_commits": [],
+        "pull_requests": [],
+        "tests": [
+          {
+            "argv": [
+              "python",
+              "-m",
+              "pytest"
+            ],
+            "cwd": ".",
+            "environment": {
+              "os": "synthetic"
+            },
+            "started_at": "2026-11-24T00:00:00Z",
+            "ended_at": "2026-11-24T00:00:01Z",
+            "exit_code": 0,
+            "status": "passed",
+            "evidence": [],
+            "notes": "Fixture only; no execution"
+          }
+        ],
+        "errors": [],
+        "logs": [],
+        "recommendations": []
+      }
+    },
+    {
+      "id": "SX-notrun-has-exit",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "result",
+        "id": "urn:uuid:00000007-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "summary": "Synthetic design report",
+        "change_type": "research",
+        "no_code_reason": "Fixture only",
+        "code_commits": [],
+        "pull_requests": [],
+        "tests": [
+          {
+            "argv": [
+              "python",
+              "-m",
+              "pytest"
+            ],
+            "cwd": ".",
+            "environment": {
+              "os": "synthetic"
+            },
+            "started_at": null,
+            "ended_at": null,
+            "exit_code": 0,
+            "status": "not_run",
+            "evidence": [],
+            "notes": "Fixture only; no execution"
+          }
+        ],
+        "errors": [],
+        "logs": [],
+        "recommendations": []
+      }
+    },
+    {
+      "id": "SX-claim-ref-format",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "claim",
+        "id": "urn:uuid:00000004-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "attempt": 1,
+        "operation_id": "urn:uuid:00000005-0000-4000-8000-000000000000",
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000",
+        "execution_id": "urn:uuid:00000006-0000-4000-8000-000000000000",
+        "claim_ref": "refs/heads/main"
+      }
+    },
+    {
+      "id": "SX-decision-self-commit",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "decision",
+        "id": "urn:uuid:0000000a-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "title": "Fixture",
+        "rationale": "Design review only",
+        "confirmed_by": "github:user:123",
+        "effective_at": "2026-11-24T00:00:00Z",
+        "tasks": [
+          {
+            "project_id": "github:123456",
+            "id": "urn:uuid:00000001-0000-4000-8000-000000000000"
+          }
+        ],
+        "supersedes": [],
+        "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "id": "SX-empty-verification-evidence",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:0000006b-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "verification.passed",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:00000134-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "verifying",
+        "to_state": "done",
+        "payload": {
+          "result": {
+            "project_id": "github:123456",
+            "id": "urn:uuid:00000007-0000-4000-8000-000000000000",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "path": ".gacp/results/fixture.md",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "verified_by": "github:user:123",
+          "evidence": []
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "S-orphan-claim-blocked",
+      "valid": true,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000068-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.blocked",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:00000131-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "ready",
+        "to_state": "blocked",
+        "payload": {
+          "reason": "Fixture",
+          "error": null,
+          "orphan_claim": {
+            "project_id": "github:123456",
+            "id": "urn:uuid:00000004-0000-4000-8000-000000000000",
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "path": "claim.json",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    },
+    {
+      "id": "SX-orphan-without-receipt",
+      "valid": false,
+      "instance": {
+        "protocol": "gacp/v1",
+        "schema_version": "1.0.0",
+        "kind": "event",
+        "id": "urn:uuid:00000068-0000-4000-8000-000000000000",
+        "project_id": "github:123456",
+        "created_at": "2026-11-24T00:00:00Z",
+        "source_agent": "fixture-only",
+        "actor": "github:user:123",
+        "links": [],
+        "event_type": "task.blocked",
+        "task_id": "urn:uuid:00000001-0000-4000-8000-000000000000",
+        "operation_id": "urn:uuid:00000131-0000-4000-8000-000000000000",
+        "previous_event_id": "urn:uuid:00000063-0000-4000-8000-000000000000",
+        "revision": 1,
+        "attempt": 1,
+        "from_state": "ready",
+        "to_state": "blocked",
+        "payload": {
+          "reason": "Fixture",
+          "error": null,
+          "orphan_claim": null
+        },
+        "definition_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "approval_id": "urn:uuid:00000003-0000-4000-8000-000000000000"
+      }
+    }
+  ]
+}
